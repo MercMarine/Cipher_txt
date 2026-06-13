@@ -65,7 +65,18 @@ class CryptoApp(ctk.CTk):
         super().__init__()
 
         self.title("Cipher text")
-        self.geometry("1200x840")
+        self.update_idletasks()
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = (screen_width // 2) - (700 // 2)
+        y = (screen_height // 2) - (650 // 2)
+        self.geometry(f"700x650+{x}+{y}")
+
+        try:
+            self.iconbitmap("icon.ico")
+        except Exception:
+            pass
+
         self.selected_file_path = None
         self.current_toast = None
 
@@ -77,22 +88,24 @@ class CryptoApp(ctk.CTk):
         self.password_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.password_frame.pack(pady=5)
 
-        self.password_entry = ctk.CTkEntry(self.password_frame, placeholder_text="Enter password for ciphering", width=500,
-                                           show="*", font=("Arial", 14))
+        self.password_entry = ctk.CTkEntry(self.password_frame, placeholder_text="Enter password for ciphering",
+                                           width=500, show="*", font=("Arial", 14))
         self.password_entry.pack(side="left", padx=5)
 
-        self.toggle_pwd_btn = ctk.CTkButton(self.password_frame, text="👁", width=40, anchor='center', command=self.toggle_password)
+        self.toggle_pwd_btn = ctk.CTkButton(self.password_frame, text="👁", width=40, anchor='center',
+                                            command=self.toggle_password, fg_color="#2ecc71")
         self.toggle_pwd_btn.pack(side="left")
 
         # Выбор файла
         self.file_info_frame = ctk.CTkFrame(self, fg_color="gray20", corner_radius=10)
         self.file_info_frame.pack(pady=15, fill="x", padx=30)
 
-        self.file_label = ctk.CTkLabel(self.file_info_frame, text="File isn't selected", font=("Arial", 13))
+        self.file_label = ctk.CTkLabel(self.file_info_frame, text="File isn't selected", font=("Arial", 13),
+                                       text_color="#2ecc71")
         self.file_label.pack(side="left", padx=15, pady=12)
 
         self.btn_select_file = ctk.CTkButton(self.file_info_frame, text="Select a file", width=130,
-                                             command=self.select_file)
+                                             command=self.select_file, fg_color="#2ecc71")
         self.btn_select_file.pack(side="right", padx=15, pady=10)
 
         # Кнопки шифрования/дешифрования
@@ -115,7 +128,7 @@ class CryptoApp(ctk.CTk):
 
         self.reader_header = ctk.CTkLabel(self.reader_frame,
                                           text="Reader for decrypted file",
-                                          font=("Arial", 14, "bold"), text_color="#3498db")
+                                          font=("Arial", 14, "bold"), text_color="#2ecc71")
         self.reader_header.pack(pady=(10, 5))
 
         self.text_reader = ctk.CTkTextbox(self.reader_frame, width=640, height=250, font=("Consolas", 12), wrap="word")
@@ -123,7 +136,7 @@ class CryptoApp(ctk.CTk):
         self.text_reader.configure(state="disabled")
 
         self.btn_copy_reader = ctk.CTkButton(self.reader_frame, text="Copy text", width=150,
-                                             command=self.copy_from_reader)
+                                             command=self.copy_from_reader, fg_color="#2ecc71")
         self.btn_copy_reader.pack(pady=(0, 10))
 
     def show_toast(self, message, color):
