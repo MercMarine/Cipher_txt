@@ -67,10 +67,10 @@ pyinstaller --noconfirm --onefile --windowed --icon=icon.ico --name "Cipher text
 
 ## Технологический стек
 
-Язык: Python 3.10+
-GUI: CustomTkinter, Pillow
-Криптография: cryptography (AES-256-GCM, PBKDF2)    
-Сборка: PyInstaller
+- Язык: Python 3.10+
+- GUI: CustomTkinter, Pillow
+- Криптография: cryptography (AES-256-GCM, PBKDF2)    
+- Сборка: PyInstaller
 
 ## Лицензия
 
