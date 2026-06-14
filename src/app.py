@@ -2,7 +2,6 @@
 
 Author - MercMarine
 GitHub - https://github.com/MercMarine
-
 app.py - Отвечает за графический интерфейс.
 
 """
@@ -21,9 +20,8 @@ class ToastNotification:
         self.parent = parent
         self.duration = duration
         self.after_id = None
-
         colors = {
-            "green": ("#238636", "white"),
+            "green": ("#2ecc71", "white"),
             "blue": ("#1f6feb", "white"),
             "red": ("#da3633", "white"),
             "orange": ("#d29922", "black")
@@ -33,20 +31,20 @@ class ToastNotification:
 
         self.frame = ctk.CTkFrame(
             parent,
-            fg_color = bg_color,
-            corner_radius = 8,
-            border_width = 0
+            fg_color=bg_color,
+            corner_radius=8,
+            border_width=0,
         )
 
         self.label = ctk.CTkLabel(
             self.frame,
-            text = message,
+            text=message,
             text_color=text_color,
-            font = ctk.CTkFont(size=14, weight='bold')
+            font=("Segoe UI", 14)
         )
         self.label.pack(padx=20, pady=10)
 
-        self.frame.place(relx=0.5, rely = 0.95, anchor='center')
+        self.frame.place(relx=0.5, rely=0.95, anchor='center')
 
         self.after_id = self.parent.after(self.duration, self.destroy)
 
@@ -63,7 +61,7 @@ class ToastNotification:
 class CryptoApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-
+        self.configure(fg_color="#262626")
         self.title("Cipher text")
         self.update_idletasks()
         screen_width = self.winfo_screenwidth()
@@ -80,63 +78,169 @@ class CryptoApp(ctk.CTk):
         self.selected_file_path = None
         self.current_toast = None
 
-        # Ввод пароля + заголовок
-        self.label_title = ctk.CTkLabel(self, text="Ciphering using AES-256-GCM algorithm",
-                                        font=("Arial", 18, "bold"))
+        # Заголовок
+        self.label_title = ctk.CTkLabel(self,
+                                        text="Ciphering using encrypt algorithms and KDF",
+                                        font=("Segoe UI", 18, "bold"),
+                                        text_color="#2ecc71",
+                                        corner_radius=10,
+                                        fg_color="#333333",
+                                        padx=5)
         self.label_title.pack(pady=(15, 10))
 
+        # Выбор алгоритма
+        self.algo_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.algo_frame.pack(pady=5)
+
+        self.label_cipher = ctk.CTkLabel(self.algo_frame,
+                                         text="Ciphering algorithm:",
+                                         font=("Segoe UI", 12),
+                                         text_color="#2ecc71",
+                                         corner_radius=10,
+                                         fg_color="#333333",
+                                         padx=5)
+
+        self.label_cipher.pack(side="left", padx=(20, 5))
+        self.combo_cipher = ctk.CTkComboBox(self.algo_frame,
+                                            values=["AES-256-GCM", "ChaCha20"],
+                                            width=200,
+                                            state="readonly",
+                                            fg_color="#262626",
+                                            font=("Segoe UI", 14),
+                                            border_color="#2ecc71",
+                                            text_color="#2ecc71",
+                                            button_color="#27ae60",
+                                            dropdown_fg_color="#262626",
+                                            dropdown_hover_color="#116e38",
+                                            dropdown_text_color="#2ecc71")
+
+        self.combo_cipher.set("AES-256-GCM")
+        self.combo_cipher.pack(side="left", padx=10)
+
+        self.label_kdf = ctk.CTkLabel(self.algo_frame,
+                                      text="Key Derivation Function (KDF):",
+                                      font=("Segoe UI", 12),
+                                      text_color="#2ecc71",
+                                      corner_radius=10,
+                                      fg_color="#333333",
+                                      padx=5)
+
+        self.label_kdf.pack(side="left", padx=(0, 5))
+        self.combo_kdf = ctk.CTkComboBox(self.algo_frame,
+                                         values=["PBKDF2", "Argon2id"],
+                                         width=200,
+                                         state="readonly",
+                                         fg_color="#262626",
+                                         font=("Segoe UI", 14),
+                                         border_color="#2ecc71",
+                                         text_color="#2ecc71",
+                                         button_color="#27ae60",
+                                         dropdown_fg_color="#262626",
+                                         dropdown_hover_color="#116e38",
+                                         dropdown_text_color="#2ecc71")
+        self.combo_kdf.set("PBKDF2")
+        self.combo_kdf.pack(side="left", padx=10)
+
+        # Ввод пароля
         self.password_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.password_frame.pack(pady=5)
 
-        self.password_entry = ctk.CTkEntry(self.password_frame, placeholder_text="Enter password for ciphering",
-                                           width=500, show="*", font=("Arial", 14))
+        self.password_entry = ctk.CTkEntry(self.password_frame,
+                                           placeholder_text="Enter password for ciphering",
+                                           placeholder_text_color="#2ecc71",
+                                           width=500,
+                                           show="*",
+                                           font=("Segoe UI", 14),
+                                           fg_color="gray15",
+                                           text_color="#2ecc71",
+                                           border_color="#2ecc71")
         self.password_entry.pack(side="left", padx=5)
 
-        self.toggle_pwd_btn = ctk.CTkButton(self.password_frame, text="👁", width=40, anchor='center',
-                                            command=self.toggle_password, fg_color="#2ecc71")
+        self.toggle_pwd_btn = ctk.CTkButton(self.password_frame,
+                                            text="👁",
+                                            width=40,
+                                            anchor='center',
+                                            command=self.toggle_password,
+                                            text_color="#2ecc71",
+                                            fg_color="gray20")
         self.toggle_pwd_btn.pack(side="left")
 
         # Выбор файла
-        self.file_info_frame = ctk.CTkFrame(self, fg_color="gray20", corner_radius=10)
+        self.file_info_frame = ctk.CTkFrame(self,
+                                            fg_color="gray20",
+                                            corner_radius=10)
         self.file_info_frame.pack(pady=15, fill="x", padx=30)
 
-        self.file_label = ctk.CTkLabel(self.file_info_frame, text="File isn't selected", font=("Arial", 13),
+        self.file_label = ctk.CTkLabel(self.file_info_frame,
+                                       text="File isn't selected",
+                                       font=("Segoe UI", 12),
                                        text_color="#2ecc71")
         self.file_label.pack(side="left", padx=15, pady=12)
 
-        self.btn_select_file = ctk.CTkButton(self.file_info_frame, text="Select a file", width=130,
-                                             command=self.select_file, fg_color="#2ecc71")
+        self.btn_select_file = ctk.CTkButton(self.file_info_frame,
+                                             text="Select a file",
+                                             font=("Segoe UI", 14),
+                                             width=130,
+                                             command=self.select_file,
+                                             text_color="gray15",
+                                             fg_color="#2ecc71")
         self.btn_select_file.pack(side="right", padx=15, pady=10)
 
         # Кнопки шифрования/дешифрования
         self.action_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.action_frame.pack(pady=5)
 
-        self.btn_encrypt = ctk.CTkButton(self.action_frame, text="Encrypt the file", fg_color="#2ecc71",
-                                         hover_color="#27ae60", width=200, height=40, font=("Arial", 14, "bold"),
+        self.btn_encrypt = ctk.CTkButton(self.action_frame,
+                                         text="Encrypt the file",
+                                         fg_color="#2ecc71",
+                                         hover_color="#27ae60",
+                                         width=200,
+                                         height=40,
+                                         font=("Segoe UI", 14, "bold"),
+                                         text_color="gray15",
                                          command=self.action_encrypt_file)
         self.btn_encrypt.pack(side="left", padx=15)
 
-        self.btn_decrypt = ctk.CTkButton(self.action_frame, text="Decrypt the file", fg_color="#2ecc71",
-                                         hover_color="#27ae60", width=200, height=40, font=("Arial", 14, "bold"),
+        self.btn_decrypt = ctk.CTkButton(self.action_frame,
+                                         text="Decrypt the file",
+                                         fg_color="#2ecc71",
+                                         hover_color="#27ae60",
+                                         width=200,
+                                         height=40,
+                                         font=("Segoe UI", 14, "bold"),
+                                         text_color="gray15",
                                          command=self.action_decrypt_file)
         self.btn_decrypt.pack(side="left", padx=15)
 
         # Реализация ридера
-        self.reader_frame = ctk.CTkFrame(self, fg_color="gray15", corner_radius=10)
+        self.reader_frame = ctk.CTkFrame(self,
+                                         fg_color="gray20",
+                                         corner_radius=10)
         self.reader_frame.pack(pady=15, fill="both", expand=True, padx=30)
 
         self.reader_header = ctk.CTkLabel(self.reader_frame,
                                           text="Reader for decrypted file",
-                                          font=("Arial", 14, "bold"), text_color="#2ecc71")
+                                          font=("Segoi UI", 14, "bold"),
+                                          text_color="#2ecc71")
         self.reader_header.pack(pady=(10, 5))
 
-        self.text_reader = ctk.CTkTextbox(self.reader_frame, width=640, height=250, font=("Consolas", 12), wrap="word")
+        self.text_reader = ctk.CTkTextbox(self.reader_frame,
+                                          width=640,
+                                          height=250,
+                                          font=("Consolas", 12),
+                                          wrap="word",
+                                          fg_color="gray12",
+                                          text_color="#2ecc71")
         self.text_reader.pack(pady=5, padx=10, fill="both", expand=True)
         self.text_reader.configure(state="disabled")
 
-        self.btn_copy_reader = ctk.CTkButton(self.reader_frame, text="Copy text", width=150,
-                                             command=self.copy_from_reader, fg_color="#2ecc71")
+        self.btn_copy_reader = ctk.CTkButton(self.reader_frame,
+                                             text="Copy text",
+                                             font=("Segoe UI", 12),
+                                             text_color="gray15",
+                                             width=150,
+                                             command=self.copy_from_reader,
+                                             fg_color="#2ecc71")
         self.btn_copy_reader.pack(pady=(0, 10))
 
     def show_toast(self, message, color):
@@ -194,7 +298,10 @@ class CryptoApp(ctk.CTk):
             with open(self.selected_file_path, 'rb') as f:
                 file_data = f.read()
 
-            encrypted_data = encrypt_bytes(file_data, password)
+            kdf_choice = "argon2id" if "argon2id" in self.combo_kdf.get().strip().lower() else "pbkdf2"
+            cipher_choice = "chacha20" if "chacha20" in self.combo_cipher.get().strip().lower() else "aes-gcm"
+
+            encrypted_data = encrypt_bytes(file_data, password, kdf_algo=kdf_choice, cipher_algo=cipher_choice)
 
             default_name = os.path.basename(self.selected_file_path) + ".enc"
             save_path = filedialog.asksaveasfilename(
@@ -210,8 +317,6 @@ class CryptoApp(ctk.CTk):
 
                 self.show_toast("File encrypted!", color="green")
                 self.clear_reader()
-                self.text_reader.configure(state="normal")
-                self.text_reader.configure(state="disabled")
 
         except Exception as e:
             self.show_toast(f"Error while ciphering: {e}", "red")
@@ -265,12 +370,10 @@ class CryptoApp(ctk.CTk):
             self.show_toast("Error: Invalid password or file is damaged!", "red")
             self.clear_reader()
             self.text_reader.configure(state="normal")
-            self.text_reader.insert("0.0",
-                                    "Decrypting error")
+            self.text_reader.insert("0.0", "Decrypting error")
             self.text_reader.configure(state="disabled")
         except Exception as e:
             self.show_toast(f"Error while decrypting: {e}", "red")
-
 
 if __name__ == "__main__":
     app = CryptoApp()
