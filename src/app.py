@@ -1,11 +1,8 @@
 """
-
 Author - MercMarine
 GitHub - https://github.com/MercMarine
 app.py - Отвечает за графический интерфейс.
-
 """
-
 import os
 import customtkinter as ctk
 from tkinter import filedialog
@@ -21,7 +18,7 @@ class ToastNotification:
         self.duration = duration
         self.after_id = None
         colors = {
-            "green": ("#2ecc71", "white"),
+            "green": ("#238636", "white"),
             "blue": ("#1f6feb", "white"),
             "red": ("#da3633", "white"),
             "orange": ("#d29922", "black")
@@ -33,19 +30,18 @@ class ToastNotification:
             parent,
             fg_color=bg_color,
             corner_radius=8,
-            border_width=0,
+            border_width=0
         )
 
         self.label = ctk.CTkLabel(
             self.frame,
             text=message,
             text_color=text_color,
-            font=("Segoe UI", 14)
+            font=ctk.CTkFont(size=14, weight='bold')
         )
         self.label.pack(padx=20, pady=10)
 
         self.frame.place(relx=0.5, rely=0.95, anchor='center')
-
         self.after_id = self.parent.after(self.duration, self.destroy)
 
     def destroy(self):
@@ -99,39 +95,36 @@ class CryptoApp(ctk.CTk):
                                          corner_radius=10,
                                          fg_color="#333333",
                                          padx=5)
-
         self.label_cipher.pack(side="left", padx=(20, 5))
+
         self.combo_cipher = ctk.CTkComboBox(self.algo_frame,
-                                            values=["AES-256-GCM", "ChaCha20"],
-                                            width=200,
+                                            values=["AES-256-GCM", "ChaCha20-Poly1305", "AES-256-CBC+HMAC"],
+                                            width=220,
                                             state="readonly",
                                             fg_color="#262626",
-                                            font=("Segoe UI", 14),
                                             border_color="#2ecc71",
                                             text_color="#2ecc71",
                                             button_color="#27ae60",
                                             dropdown_fg_color="#262626",
                                             dropdown_hover_color="#116e38",
                                             dropdown_text_color="#2ecc71")
-
         self.combo_cipher.set("AES-256-GCM")
         self.combo_cipher.pack(side="left", padx=10)
 
         self.label_kdf = ctk.CTkLabel(self.algo_frame,
                                       text="Key Derivation Function (KDF):",
-                                      font=("Segoe UI", 12),
+                                      font=("Arial", 12),
                                       text_color="#2ecc71",
                                       corner_radius=10,
                                       fg_color="#333333",
                                       padx=5)
-
         self.label_kdf.pack(side="left", padx=(0, 5))
+
         self.combo_kdf = ctk.CTkComboBox(self.algo_frame,
-                                         values=["PBKDF2", "Argon2id"],
+                                         values=["PBKDF2", "Argon2id", "scrypt"],
                                          width=200,
                                          state="readonly",
                                          fg_color="#262626",
-                                         font=("Segoe UI", 14),
                                          border_color="#2ecc71",
                                          text_color="#2ecc71",
                                          button_color="#27ae60",
@@ -150,15 +143,15 @@ class CryptoApp(ctk.CTk):
                                            placeholder_text_color="#2ecc71",
                                            width=500,
                                            show="*",
-                                           font=("Segoe UI", 14),
+                                           font=("Arial", 14),
                                            fg_color="gray15",
                                            text_color="#2ecc71",
                                            border_color="#2ecc71")
         self.password_entry.pack(side="left", padx=5)
 
         self.toggle_pwd_btn = ctk.CTkButton(self.password_frame,
-                                            text="👁",
-                                            width=40,
+                                            text="Show",
+                                            width=60,
                                             anchor='center',
                                             command=self.toggle_password,
                                             text_color="#2ecc71",
@@ -173,13 +166,12 @@ class CryptoApp(ctk.CTk):
 
         self.file_label = ctk.CTkLabel(self.file_info_frame,
                                        text="File isn't selected",
-                                       font=("Segoe UI", 12),
+                                       font=("Arial", 13),
                                        text_color="#2ecc71")
         self.file_label.pack(side="left", padx=15, pady=12)
 
         self.btn_select_file = ctk.CTkButton(self.file_info_frame,
                                              text="Select a file",
-                                             font=("Segoe UI", 14),
                                              width=130,
                                              command=self.select_file,
                                              text_color="gray15",
@@ -196,7 +188,7 @@ class CryptoApp(ctk.CTk):
                                          hover_color="#27ae60",
                                          width=200,
                                          height=40,
-                                         font=("Segoe UI", 14, "bold"),
+                                         font=("Arial", 14, "bold"),
                                          text_color="gray15",
                                          command=self.action_encrypt_file)
         self.btn_encrypt.pack(side="left", padx=15)
@@ -207,7 +199,7 @@ class CryptoApp(ctk.CTk):
                                          hover_color="#27ae60",
                                          width=200,
                                          height=40,
-                                         font=("Segoe UI", 14, "bold"),
+                                         font=("Arial", 14, "bold"),
                                          text_color="gray15",
                                          command=self.action_decrypt_file)
         self.btn_decrypt.pack(side="left", padx=15)
@@ -220,7 +212,7 @@ class CryptoApp(ctk.CTk):
 
         self.reader_header = ctk.CTkLabel(self.reader_frame,
                                           text="Reader for decrypted file",
-                                          font=("Segoi UI", 14, "bold"),
+                                          font=("Arial", 14, "bold"),
                                           text_color="#2ecc71")
         self.reader_header.pack(pady=(10, 5))
 
@@ -236,8 +228,6 @@ class CryptoApp(ctk.CTk):
 
         self.btn_copy_reader = ctk.CTkButton(self.reader_frame,
                                              text="Copy text",
-                                             font=("Segoe UI", 12),
-                                             text_color="gray15",
                                              width=150,
                                              command=self.copy_from_reader,
                                              fg_color="#2ecc71")
@@ -251,21 +241,21 @@ class CryptoApp(ctk.CTk):
     def toggle_password(self):
         if self.password_entry.cget("show") == "*":
             self.password_entry.configure(show="")
+            self.toggle_pwd_btn.configure(text="Hide")
         else:
             self.password_entry.configure(show="*")
+            self.toggle_pwd_btn.configure(text="Show")
 
     def select_file(self):
         path = filedialog.askopenfilename(title="Select a file for crypting or decrypting")
-
         if path:
             self.selected_file_path = path
             file_name = os.path.basename(path)
             file_size = os.path.getsize(path) / 1024
             self.file_label.configure(
-                text=f"{file_name} ({file_size:.1f} КБ)",
+                text=f"{file_name} ({file_size:.1f} KB)",
                 text_color="#2ecc71"
             )
-
             self.show_toast("The file is selected!", "blue")
             self.clear_reader()
 
@@ -279,10 +269,9 @@ class CryptoApp(ctk.CTk):
         if not content:
             self.show_toast("Text field is empty", color="orange")
             return
-
         self.clipboard_clear()
         self.clipboard_append(content)
-        self.show_toast("Текст успешно скопирован!", color="green")
+        self.show_toast("Text copied successfully!", color="green")
 
     def action_encrypt_file(self):
         if not self.selected_file_path:
@@ -298,8 +287,22 @@ class CryptoApp(ctk.CTk):
             with open(self.selected_file_path, 'rb') as f:
                 file_data = f.read()
 
-            kdf_choice = "argon2id" if "argon2id" in self.combo_kdf.get().strip().lower() else "pbkdf2"
-            cipher_choice = "chacha20" if "chacha20" in self.combo_cipher.get().strip().lower() else "aes-gcm"
+            kdf_value = self.combo_kdf.get().strip().lower()
+            cipher_value = self.combo_cipher.get().strip().lower()
+
+            if "argon2id" in kdf_value:
+                kdf_choice = "argon2id"
+            elif "scrypt" in kdf_value:
+                kdf_choice = "scrypt"
+            else:
+                kdf_choice = "pbkdf2"
+
+            if "chacha20" in cipher_value:
+                cipher_choice = "chacha20"
+            elif "cbc" in cipher_value:
+                cipher_choice = "aes-cbc"
+            else:
+                cipher_choice = "aes-gcm"
 
             encrypted_data = encrypt_bytes(file_data, password, kdf_algo=kdf_choice, cipher_algo=cipher_choice)
 
@@ -314,7 +317,6 @@ class CryptoApp(ctk.CTk):
             if save_path:
                 with open(save_path, 'wb') as f:
                     f.write(encrypted_data)
-
                 self.show_toast("File encrypted!", color="green")
                 self.clear_reader()
 
@@ -354,7 +356,6 @@ class CryptoApp(ctk.CTk):
                 self.clear_reader()
                 self.text_reader.configure(state="normal")
 
-                # Проверка размера для избежания зависания приложения
                 if len(decrypted_data) <= 1_000_000:
                     try:
                         text_content = decrypted_data.decode('utf-8')
@@ -362,7 +363,7 @@ class CryptoApp(ctk.CTk):
                     except UnicodeDecodeError:
                         self.text_reader.insert("0.0", "The file isn't .txt")
                 else:
-                    self.text_reader.insert("0.0", "The file is too big displaying")
+                    self.text_reader.insert("0.0", "The file is too big for displaying")
 
                 self.text_reader.configure(state="disabled")
 
